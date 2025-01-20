@@ -10,16 +10,28 @@ type ScoreMap = Dict[Tuple[Move, Move], Tuple[int, int]]
 
 
 class GameConfig(object):
-    player1: Player
-    player2: Player
-    num_rounds: int = 10
-    mistake_probability: float = 0.0
-    score_map: ScoreMap = {
-        (Move.COOPERATE, Move.COOPERATE): (3, 3),
-        (Move.DEFECT, Move.DEFECT): (1, 1),
-        (Move.DEFECT, Move.COOPERATE): (5, 0),
-        (Move.COOPERATE, Move.DEFECT): (0, 5),
-    }
+    def __init__(
+        self,
+        player1: Player,
+        player2: Player,
+        num_rounds: int = 10,
+        mistake_probability: float = 0.0,
+        score_map: Optional[ScoreMap] = None,
+    ):
+        self.player1 = player1
+        self.player2 = player2
+        self.num_rounds = num_rounds
+        self.mistake_probability = mistake_probability
+        self.score_map = (
+            score_map
+            if score_map is not None
+            else {
+                (Move.COOPERATE, Move.COOPERATE): (3, 3),
+                (Move.DEFECT, Move.DEFECT): (1, 1),
+                (Move.DEFECT, Move.COOPERATE): (5, 0),
+                (Move.COOPERATE, Move.DEFECT): (0, 5),
+            }
+        )
 
 
 class GameState(Enum):
