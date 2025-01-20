@@ -133,6 +133,10 @@ class DetectivePlayer(Player):
         super().reset()
         self.defect = False
 
+    def prepare_for_next_game(self):
+        super().prepare_for_next_game()
+        self.defect = False
+
     def select_move(self, opponent_history: list[Move]) -> Move:
         move = Move.COOPERATE
 
@@ -190,6 +194,10 @@ class SimpletonPlayer(Player):
 
     def reset(self):
         super().reset()
+        self.last_move = Move.COOPERATE
+
+    def prepare_for_next_game(self):
+        super().prepare_for_next_game()
         self.last_move = Move.COOPERATE
 
     def select_move(self, opponent_history: list[Move]) -> Move:
