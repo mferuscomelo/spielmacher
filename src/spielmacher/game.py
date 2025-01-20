@@ -65,8 +65,8 @@ class Game:
         self.__current_round = 0
 
         def plot_round(round_index):
-            p1_scores = self.__p1.score_history
-            p2_scores = self.__p2.score_history
+            p1_scores = self.__p1.current_score_history
+            p2_scores = self.__p2.current_score_history
 
             ax.clear()
             ax.set_ylim(0, max(p1_scores + p2_scores) + 5)

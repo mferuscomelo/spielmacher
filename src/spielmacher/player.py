@@ -30,6 +30,10 @@ class Player(ABC):
         return self.move_history[self.num_games]
 
     @property
+    def current_score_history(self) -> list[int]:
+        return self.score_history[self.num_games]
+
+    @property
     def last_move(self) -> Move:
         return self.current_move_history[-1]
 
@@ -41,7 +45,7 @@ class Player(ABC):
         self.total_score = 0
         self.num_games = 0
         self.move_history = [[]]
-        self.score_history = [[]]
+        self.score_history = [[0]]  # Add 0 to allow for plotting
 
     def update_move_history(self, move: Move) -> None:
         self.move_history[self.num_games].append(move)
@@ -54,8 +58,8 @@ class Player(ABC):
         self.total_score += self.round_score
         self.round_score = 0
         self.num_games += 1
-        self.score_history[self.num_games] = []
-        self.move_history[self.num_games] = []
+        self.move_history.append([])
+        self.score_history.append([0])  # Add 0 to allow for plotting
 
     def print_moves(self) -> None:
         styled_history = [
@@ -64,7 +68,7 @@ class Player(ABC):
                 if move == Move.COOPERATE
                 else f"\033[91m{move.value}\033[0m"
             )
-            for move in self.move_history[self.num_games]
+            for move in self.current_move_history
         ]
         print(f"{self.name:<25} {' '.join(styled_history)}")
 
