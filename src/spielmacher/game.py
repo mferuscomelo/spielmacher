@@ -107,7 +107,7 @@ class Game:
 
         for _ in range(self.__num_rounds):
             self.__play_round()
-            if callback:
+            if callback is not None:
                 callback(self.__p1, self.__p2)
 
         self.__state = GameState.FINISHED
