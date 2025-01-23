@@ -1,6 +1,6 @@
 [project]
 name = "spielmacher"
-version = "0.0.2"
+version = "0.0.3"
 authors = [
   { name="Milan Ferus-Comelo", email="51026229+mferuscomelo@users.noreply.github.com" },
 ]

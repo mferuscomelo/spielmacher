@@ -100,6 +100,13 @@ The package includes several predefined player strategies:
 - `HumanPlayer`: Human player that selects moves manually.
 - `SimulatedPlayer`: Simulated player that selects moves based on a pre-trained model.
 
+## Uploading
+
+```bash
+python -m build
+python -m twine upload dist/*
+```
+
 ## License
 
 This project is licensed under the GNU General Public License v3.0. See the [LICENSE](LICENSE) file for details.
