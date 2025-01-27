@@ -1,0 +1,147 @@
+@startuml class_diagram
+
+package spielmacher {
+    class Player {
+        + round_score: int
+        + total_score: int
+        + num_games: int
+        + move_history: MoveHistory
+        + score_history: ScoreHistory
+        + name: str
+        + current_move_history: list[Move]
+        + current_score_history: list[int]
+        + last_move: Move
+
+        + reset(): void
+        + update_move_history(move: Move): void
+        + update_round_score(points: int): void
+        + prepare_for_next_game(): void
+        + print_moves(): void
+        + {abstract} select_move(opponent_history: list[Move]): Move
+    }
+
+    class CooperativePlayer {
+        + select_move(opponent_history: list[Move]): Move
+    }
+
+    ' class EgoisticPlayer {
+    '     + select_move(opponent_history: list[Move]): Move
+    ' }
+
+    ' class RandomPlayer {
+    '     + select_move(opponent_history: list[Move]): Move
+    ' }
+
+    ' class GrudgerPlayer {
+    '     + select_move(opponent_history: list[Move]): Move
+    ' }
+
+    class DetectivePlayer {
+        - defect: bool
+
+        + reset(): void
+        + prepare_for_next_game(): void
+        + select_move(opponent_history: list[Move]): Move
+    }
+
+    ' class TitForTatPlayer {
+    '     + select_move(opponent_history: list[Move]): Move
+    ' }
+
+    ' class ForgivingTitForTatPlayer {
+    '     - FORGIVE_PROBABILITY: int
+    '     + select_move(opponent_history: list[Move]): Move
+    ' }
+
+    ' class SimpletonPlayer {
+    '     - last_move: Move
+
+    '     + reset(): void
+    '     + prepare_for_next_game(): void
+    '     + select_move(opponent_history: list[Move]): Move
+    ' }
+
+    ' class EveryNthDefectorPlayer {
+    '     - n: int
+
+    '     + select_move(opponent_history: list[Move]): Move
+    ' }
+
+    ' class HumanPlayer {
+    '     + select_move(opponent_history: list[Move]): Move
+    ' }
+
+    class SimulatedPlayer {
+        - model: RandomForestClassifier
+        - encoder: LabelEncoder
+
+        + select_move(opponent_history: list[Move]): Move
+        - transform_history(history: list[Move]): list[int]
+    }
+
+    Player <|-- CooperativePlayer
+    ' Player <|-- EgoisticPlayer
+    ' Player <|-- RandomPlayer
+    ' Player <|-- GrudgerPlayer
+    Player <|-- DetectivePlayer
+    ' Player <|-- TitForTatPlayer
+    ' Player <|-- ForgivingTitForTatPlayer
+    ' Player <|-- SimpletonPlayer
+    ' Player <|-- EveryNthDefectorPlayer
+    ' Player <|-- HumanPlayer
+    Player <|-- SimulatedPlayer
+
+    Player ..> Move
+
+    enum Move {
+        COOPERATE
+        DEFECT
+        EMPTY
+    }
+
+    enum GameState {
+        INITIALIZED
+        RUNNING
+        FINISHED
+    }
+
+    interface GameConfig {
+        + player1: Player
+        + player2: Player
+        + num_rounds: int
+        + mistake_probability: float
+        + score_map: ScoreMap
+    }
+
+    class Game {
+        - p1: Player
+        - p2: Player
+        - num_rounds: int
+        - mistake_probability: float
+        - score_map: ScoreMap
+        - state: GameState
+
+        + get_scores(): tuple[int, int]
+        + plot_scores(): void
+        + run(callback: Optional[Callable[[Player, Player], None]]): void
+        - play_round(): void
+        - apply_mistake(move: Move): void
+        - update_scores(move1: Move, move2: Move): void
+    }
+
+    class Tournament {
+        - players: list[Player]
+        - rounds_per_game: int
+
+        + Tournament(players: list[Player], rounds_per_game: int)
+        + run(callback: Optional[Callable[[Player, Player], None]]): void
+    }
+
+    GameConfig --> Player
+    Game ..> GameConfig
+    Game ..> GameState
+    Tournament o-- Player
+    Tournament *-- Game
+}
+
+@enduml
